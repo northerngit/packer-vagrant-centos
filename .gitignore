@@ -1,0 +1,13 @@
+# OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Packer cache directory
+packer_cache
+
+# Provisioned vagrant boxes
+*.box
+
+# Vagrant build store 
+.vagrant

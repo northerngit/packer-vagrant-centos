@@ -15,6 +15,13 @@ do
     rm -f "$i"/EMPTY
 done
 
+# Zero out swap partition using dd, then delete the written file.
+swappart=`cat /proc/swaps | tail -n1 | awk -F ' ' '{print $1}'`
+swapoff $swappart;
+dd if=/dev/zero of=$swappart;
+mkswap $swappart;
+swapon $swappart;
+
 VolumeGroup=$(vgdisplay | grep Name | awk -F" " '{ print $3 }')
 
 for j in $VolumeGroup

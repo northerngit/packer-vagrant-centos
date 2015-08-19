@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install the VMWare Tools from a linux ISO.
-yum install -y fuse-libs
+yum install -y fuse-libs perl
 
 mount -o loop /tmp/linux.iso /media/
 

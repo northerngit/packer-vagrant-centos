@@ -61,6 +61,8 @@
                     "scripts/vagrant.sh",
                     "scripts/sshd.sh",
                     "scripts/vmware-tools.sh",
+                    "scripts/networking.sh",
+                    "scripts/cleanup.sh",
                     "scripts/zerodisk.sh"
                 ]
             }

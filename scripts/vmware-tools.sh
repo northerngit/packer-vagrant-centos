@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Install the VMWare Tools from a linux ISO.
-
 yum install -y fuse-libs
 
 mount -o loop /tmp/linux.iso /media/
@@ -18,6 +17,3 @@ rm -fr /tmp/vmware-tools-distrib
 # Fix HGFS kernel module timeout - https://dantehranian.wordpress.com/2014/08/19/vagrant-vmware-resolving-waiting-for-hgfs-kernel-module-timeouts/
 sed -i 's/answer AUTO_KMODS_ENABLED_ANSWER no/answer AUTO_KMODS_ENABLED_ANSWER yes/g' /etc/vmware-tools/locations
 sed -i 's/answer AUTO_KMODS_ENABLED no/answer AUTO_KMODS_ENABLED yes/g' /etc/vmware-tools/locations
-
-rm -rf /etc/udev/rules.d/70-persistent-net.rules
-sed -i "s/HWADDR=.*//" /etc/sysconfig/network-scripts/ifcfg-eth0

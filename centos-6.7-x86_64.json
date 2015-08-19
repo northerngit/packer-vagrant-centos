@@ -4,7 +4,7 @@
         "vm_name": "centos-6.7-x86_64",
         "version": "1.0.0",
         "compression_level": "9",
-        "ssh_username": "vagrant",
+        "ssh_username": "root",
         "ssh_password": "vagrant",
         "cpus": "1",
         "disk_size": "40960",

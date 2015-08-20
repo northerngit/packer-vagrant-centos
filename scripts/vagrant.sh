@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Set sudo to not require a TTY
-sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
-
 # Provision vagrant user
 groupadd vagrant
 useradd vagrant -g vagrant -G wheel
@@ -12,7 +9,8 @@ echo "vagrant" | passwd --stdin vagrant
 date > /etc/vagrant_box_build_time
 
 # Allow sudo access for vagrant user
-echo 'vagrant ALL=NOPASSWD:ALL' > /etc/sudoers.d/vagrant
+echo 'Defaults:vagrant !requiretty' > /etc/sudoers.d/vagrant
+echo 'vagrant ALL=NOPASSWD:ALL' >> /etc/sudoers.d/vagrant
 echo '%wheel ALL=NOPASSWD: ALL' >> /etc/sudoers.d/vagrant
 echo 'Defaults env_keep="SSH_AUTH_SOCK"' >> /etc/sudoers.d/vagrant
 chmod 0440 /etc/sudoers.d/vagrant

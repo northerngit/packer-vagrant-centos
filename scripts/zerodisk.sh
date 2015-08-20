@@ -22,20 +22,6 @@ dd if=/dev/zero of=$swappart bs=1M > /dev/null 2>&1;
 mkswap $swappart > /dev/null 2>&1;
 swapon $swappart;
 
-VolumeGroup=$(vgdisplay | grep Name | awk -F" " '{ print $3 }')
-
-for j in $VolumeGroup
-do
-    echo "$j"
-    lvcreate -l vgdisplay "$j" | grep Free | awk -F" " '{ print $5 }' -n zero "$j"
-    if [ -a /dev/"$j"/zero ]; then
-        cat /dev/zero > /dev/"$j"/zero
-        /bin/sync
-        sleep 10
-        lvremove -f /dev/"$j"/zero
-    fi
-done
-
 # Make sure we wait until all the data is written to disk, otherwise
 # Packer might quit too early before the large files are deleted
 sleep 10

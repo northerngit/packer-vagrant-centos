@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set sudo to not require a TTY
+sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+
 # Provision vagrant user
 groupadd vagrant
 useradd vagrant -g vagrant -G wheel

@@ -18,8 +18,8 @@ done
 # Zero out swap partition using dd, then delete the written file.
 swappart=`cat /proc/swaps | tail -n1 | awk -F ' ' '{print $1}'`
 swapoff $swappart;
-dd if=/dev/zero of=$swappart;
-mkswap $swappart;
+dd if=/dev/zero of=$swappart bs=1M > /dev/null 2>&1;
+mkswap $swappart > /dev/null 2>&1;
 swapon $swappart;
 
 VolumeGroup=$(vgdisplay | grep Name | awk -F" " '{ print $3 }')

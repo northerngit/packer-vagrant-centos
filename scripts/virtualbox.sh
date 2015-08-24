@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # Install the VirtualBox Guest Additions from an ISO.
-yum -y install gcc kernel-devel-`uname -r`
+yum -y install gcc make kernel-devel-`uname -r`
+
+KERN_DIR=/usr/src/kernels/`uname -r`
+export KERN_DIR
 
 VBOX_VERSION=$(cat /tmp/.vbox_version)
 cd /tmp

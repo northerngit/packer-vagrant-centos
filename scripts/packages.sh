@@ -23,3 +23,6 @@ else
     yum install "${packages[@]}" -y
     yum update -y
 fi
+
+shutdown -r now
+sleep 60

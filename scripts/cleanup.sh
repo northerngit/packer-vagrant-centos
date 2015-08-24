@@ -2,7 +2,7 @@
 
 # Remove old kernel updates
 yum install yum-utils -y
-package-cleanup --oldkernels --count=1
+package-cleanup --oldkernels --count=1 -y
 
 # Clear yum cache
 yum clean all

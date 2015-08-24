@@ -2,7 +2,7 @@
 
 # Zero out free space using dd, then delete the written file.
 
-FileSystem=$(grep ext /etc/mtab| awk -F" " '{ print $2 }')
+FileSystem=$(grep "ext[2-4]\|(x\|z\|btr)fs" /etc/mtab| awk -F" " '{ print $2 }')
 
 for i in $FileSystem
 do

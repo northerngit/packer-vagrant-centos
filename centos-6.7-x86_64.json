@@ -40,6 +40,7 @@
         "shutdown_command": "shutdown -P now",
         "disk_size": "{{ user `disk_size` }}",
         "headless": "{{ user `headless` }}",
+        "guest_os_type": "centos-64",
         "tools_upload_flavor": "linux",
         "tools_upload_path": "/tmp/{{.Flavor}}.iso",
         "vmx_data": {

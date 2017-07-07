@@ -1,0 +1,128 @@
+{
+
+    "variables": {
+        "vm_name": "centos-6.9-x86_64",
+        "version": "1.0.0",
+        "compression_level": "9",
+        "ssh_username": "root",
+        "ssh_password": "vagrant",
+        "cpus": "1",
+        "disk_size": "40960",
+        "headless": "false",
+        "memory": "1024",
+        "os_version": "6.9",
+        "arch": "x86_64",
+        "iso_checksum_type": "sha256",
+        "iso_checksum": "422af57b493b8af49d485885a730c5a1d955f803fac85aa51311c393168b9080"
+    },
+
+    "builders": [{
+        "type": "vmware-iso",
+        "vm_name": "{{ user `vm_name` }}",
+        "iso_urls": [
+            "http://mirror.bytemark.co.uk/centos/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://mirrors.melbourne.co.uk/sites/ftp.centos.org/centos/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://mirror.sov.uk.goscomb.net/centos/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://www.mirrorservice.org/sites/mirror.centos.org/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://mirrors.ukfast.co.uk/sites/ftp.centos.org/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso"
+        ],
+        "iso_checksum": "{{ user `iso_checksum` }}",
+        "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+        "http_directory": "http",
+        "boot_command": [
+            "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+        ],
+        "boot_wait": "5s",
+        "ssh_username": "{{ user `ssh_username` }}",
+        "ssh_password": "{{ user `ssh_password` }}",
+        "ssh_wait_timeout": "60m",
+        "ssh_pty": "true",
+        "shutdown_command": "shutdown -P now",
+        "disk_size": "{{ user `disk_size` }}",
+        "headless": "{{ user `headless` }}",
+        "guest_os_type": "centos-64",
+        "tools_upload_flavor": "linux",
+        "tools_upload_path": "/tmp/{{.Flavor}}.iso",
+        "vmx_data": {
+            "memsize": "{{ user `memory` }}",
+            "numvcpus": "1",
+            "cpuid.coresPerSocket": "2",
+            "serial0.present": "FALSE",
+            "sound.present": "FALSE",
+            "floppy0.present": "FALSE"
+        }
+    }, {
+        "type": "virtualbox-iso",
+        "vm_name": "{{ user `vm_name` }}",
+        "iso_urls": [
+            "http://mirror.bytemark.co.uk/centos/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://mirrors.melbourne.co.uk/sites/ftp.centos.org/centos/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://mirror.sov.uk.goscomb.net/centos/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://www.mirrorservice.org/sites/mirror.centos.org/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso",
+            "http://mirrors.ukfast.co.uk/sites/ftp.centos.org/{{ user `os_version`}}/isos/{{ user `arch` }}/CentOS-{{ user `os_version` }}-{{ user `arch`}}-minimal.iso"
+        ],
+        "iso_checksum": "{{ user `iso_checksum` }}",
+        "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+        "http_directory": "http",
+        "boot_command": [
+            "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+        ],
+        "boot_wait": "5s",
+        "ssh_username": "{{ user `ssh_username` }}",
+        "ssh_password": "{{ user `ssh_password` }}",
+        "ssh_wait_timeout": "60m",
+        "ssh_pty": "true",
+        "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
+        "hard_drive_interface": "scsi",
+        "disk_size": "{{ user `disk_size` }}",
+        "headless": "{{ user `headless` }}",
+        "guest_os_type": "RedHat_64",
+        "shutdown_command": "shutdown -P now",
+        "guest_additions_path": "/tmp/VBoxGuestAdditions_{{.Version}}.iso",
+        "virtualbox_version_file": "/tmp/.vbox_version",
+        "vboxmanage": [
+            ["modifyvm", "{{.Name}}", "--memory", "{{ user `memory` }}"],
+            ["modifyvm", "{{.Name}}", "--cpus", "{{ user `cpus` }}"],
+            ["modifyvm", "{{.Name}}", "--audio", "none"],
+            ["modifyvm", "{{.Name}}", "--vram", "8"],
+            ["modifyvm", "{{.Name}}", "--monitorcount", "1"],
+            ["modifyvm", "{{.Name}}", "--accelerate2dvideo", "off"],
+            ["modifyvm", "{{.Name}}", "--accelerate3d", "off"]
+        ]
+    }],
+
+    "provisioners": [{
+        "type": "shell",
+        "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
+        "override": {
+            "vmware-iso": {
+                "scripts": [
+                    "scripts/vagrant.sh",
+                    "scripts/sshd.sh",
+                    "scripts/vmware-tools.sh",
+                    "scripts/packages.sh",
+                    "scripts/networking.sh",
+                    "scripts/cleanup.sh",
+                    "scripts/zerodisk.sh"
+                ]
+            },
+            "virtualbox-iso": {
+                "scripts": [
+                    "scripts/vagrant.sh",
+                    "scripts/sshd.sh",
+                    "scripts/packages.sh",
+                    "scripts/virtualbox.sh",
+                    "scripts/networking.sh",
+                    "scripts/cleanup.sh",
+                    "scripts/zerodisk.sh"
+                ]
+            }
+        }
+    }],
+
+    "post-processors": [{
+        "type": "vagrant",
+        "compression_level": "{{ user `compression_level` }}",
+        "output": "builds/{{ user `vm_name` }}-{{ user `version` }}-{{ .Provider }}.box"
+    }]
+}

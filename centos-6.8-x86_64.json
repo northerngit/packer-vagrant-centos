@@ -93,6 +93,7 @@
 
     "provisioners": [{
         "type": "shell",
+        "expect_disconnect": "true",
         "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
         "override": {
             "vmware-iso": {
